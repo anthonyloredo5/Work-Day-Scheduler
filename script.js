@@ -53,7 +53,6 @@ $(document).ready(function () {
         //sets the color for all divs based on current hour
         if (i < currentHour) {
             textArea.addClass('past');
-            textArea.prop('readonly', true);
         }
         else if (i == currentHour) {
             textArea.addClass('present');
