@@ -1,98 +1,101 @@
 //load up html first
-$(document).ready(function(){
+$(document).ready(function () {
+
     console.log('LOADING!!!')
     //get the data with Moment
     console.log(moment().format("dddd, MMMM Do"));
     //put the data on the page
     $("#currentDay").text(moment().format("dddd, MMMM Do"));
-    // add css classes according to the time
     //get current hour
     var currentHour = moment().hours();
     console.log(currentHour);
 
-    //forEach loop over the hour blocks
-    $(".time-block").each(function(){
-
-
-        //1 Make the piece of html with js 
-        var timeBlockDiv = $('<div>')
-        var timeDiv = $('<div>')
-        var button = $('<button>')
-    
-
-        //2 Dress the html pieces up how u want htem!!
-        timeBlockDiv.addClass('time-block')
-        timeBlockDiv.attr('id', 'hour-')
-
-        
-        //3 append it to the page!!
-
-        // first append all the pieces into the maind timeblocDiv we made
-        timeBlockDiv.append(button, timeDiv)
-        //finallt take the hwole chunk of html and append it to the page!!
-        //$('#plannerBlocks').append(timeBlockDiv)
-
-
-    });
+    var timeBlockDiv;
+    var timeDiv;
+    var button;
+    var textArea;
 
     for (let i = 9; i < 18; i++) {
-            console.log('looping ?', i )
+        console.log('looping ?', i);
 
         //1 Make the piece of html with js 
-        var timeBlockDiv = $('<div>')
-        var timeDiv = $('<div>')
-        var button = $('<button>')
-        var textArea = $('<textarea>')
-        button.text('save')
-        button.attr('name', i)
-    
+        timeBlockDiv = $('<div>');
+        timeDiv = $('<div>');
+        button = $('<button>');
+        textArea = $('<textarea>');
+        var icon = $("<i>");
 
         //2 Dress the html pieces up how u want htem!!
-        timeBlockDiv.addClass('time-block')
+        timeBlockDiv.addClass('row time-block');
+        timeDiv.addClass('col-md-1 hour');
+        button.addClass('btn saveBtn col-md-1 saveBtn');
+        icon.addClass('fas fa-save');
+        textArea.addClass('col-md-10 description');
+        button.append(icon);
 
-        if( i > 12 ) {
-            var num = i - 12
-            timeBlockDiv.attr('id', 'hour-' + num)
-            textArea.attr('id', 'input-' +num)
-        } else {
-            timeBlockDiv.attr('id', 'hour-' + i)
-            textArea.attr('id', 'input-' +i)
-        }
-    
-        
         //3 append it to the page!!
 
         // first append all the pieces into the maind timeblocDiv we made
-        timeBlockDiv.append(button, timeDiv, textArea)
+        timeBlockDiv.append(timeDiv, textArea, button);
         //finallt take the hwole chunk of html and append it to the page!!
-        $('#plannerBlocks').append(timeBlockDiv)
-        
+        $('#plannerBlocks').append(timeBlockDiv);
+
+        //creates the time text 
+        var num;
+        if (i < 13) {
+            timeDiv.text(i + "am");
+        }
+        else if (i >= 13) {
+            num = i - 12;
+            timeDiv.text(num + "pm");
+        }
+
+        //sets the color for all divs based on current hour
+        if (i < currentHour) {
+            textArea.addClass('past');
+            textArea.prop('readonly', true);
+        }
+        else if (i == currentHour) {
+            textArea.addClass('present');
+        }
+        else if (i > currentHour) {
+            textArea.addClass('future');
+        }
+
+        //How we're going to assign our differnet divs
+        timeBlockDiv.attr('id', 'hour-' + i);
+        //how we acces the string
+        textArea.attr('id', 'input-' + i);
+        //how we know wherer the button is located
+        button.attr('name', i);
+
+        timeBlockDiv.append(textArea, button);
+        console.log(timeBlockDiv);
+
     }
 
+    //local storage
+    $('.saveBtn').click(function () {
+        //go get data from text box
+        var data = $.parseJSON($(this).attr('name'));
+        var tData = $("#input-" + data).val().trim();
 
+        localStorage.setItem(data, tData);
+        console.log(tData);
+        console.log(data);
+    });
 
+    function displayData() {
+        if (currentHour > 17) {
+            localStorage.clear();
+        }
+        for (var i = 9; i < 18; i++) {
+            console.log(localStorage.getItem(i));
+            $("#input-" + i).text(localStorage.getItem(i));
 
-    //get the value from html for current hour block
-    //var blockHour = parseInt($(this).attr("id").split("-")[1]);
-
-    //check and see if the currentHour > or < blockHour
-    //add css classes according to time
-    $(this).addClass("past");
-
-
-    //1 GEt all the time blocks on the page 9 - 5
-
-    //2 When u click butotn do u know which time block hour u clicked ??
-
-    //3 can u see text area for that corresponing hours button we clicked
-
-    //3 Local storage save what we just typed to local stoage when we click the button
-
-    //4 change color of text area based on hour
-
-
-
-
+        }
+    }
+    displayData();
 
 
 
