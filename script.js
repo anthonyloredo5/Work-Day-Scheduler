@@ -1,7 +1,7 @@
 //load up html first
 $(document).ready(function () {
 
-    console.log('LOADING!!!')
+    console.log('LOADING!!!');
     //get the data with Moment
     console.log(moment().format("dddd, MMMM Do"));
     //put the data on the page
@@ -77,10 +77,10 @@ $(document).ready(function () {
     //local storage
     $('.saveBtn').click(function () {
         //go get data from text box
-        var data = $.parseJSON($(this).attr('name'));
-        var tData = $("#input-" + data).val().trim();
+        var index = $.parseJSON($(this).attr('name'));
+        var tData = $("#input-" + index).val().trim();
 
-        localStorage.setItem(data, tData);
+        localStorage.setItem(index, tData);
         console.log(tData);
         console.log(data);
     });
@@ -96,20 +96,5 @@ $(document).ready(function () {
         }
     }
     displayData();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 })
